@@ -5,11 +5,14 @@ package com.spinningnoodle.rubikssolver.library;
  * face
  */
 public class Face {
-    public enum FColor {White, Red, Blue, Orange, Green, Yellow}
-    public enum FaceType {North,South,East,West,Near,Far}
     private final FaceType type;
+    private final FColor[][] colors = new FColor[3][3];
 
-    private FColor[][] colors = new FColor[3][3];
+    public FColor getColor(int row, int col) {
+        return colors[row][col];
+    }
+
+    public enum FColor {White, Red, Blue, Orange, Green, Yellow}
 
     public Face(Face that) {
         this.type = that.type;
@@ -18,6 +21,9 @@ public class Face {
         }
     }
 
+    public FColor getFaceColor() {
+        return colors[1][1];
+    }
 
     public Face(FColor color, FaceType type) {
         for (int i = 0; i < 3; i++) {
@@ -115,7 +121,6 @@ public class Face {
         }
         return score;
     }
-
 
 }
 

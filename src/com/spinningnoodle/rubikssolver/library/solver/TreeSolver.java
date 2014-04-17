@@ -1,7 +1,7 @@
-package com.spinningnoodle.rubikssolver;
+package com.spinningnoodle.rubikssolver.library.solver;
 
 import com.spinningnoodle.rubikssolver.library.Cube;
-import com.spinningnoodle.rubikssolver.library.Face;
+import com.spinningnoodle.rubikssolver.library.FaceType;
 
 import java.util.*;
 
@@ -9,12 +9,13 @@ import java.util.*;
  * Created by Freddy on 3/29/2014.
  * Actual Solver class
  */
-public class Solver {
+public class TreeSolver implements Solver {
     Queue<CubeWithTransforms> queue = new LinkedList<>();
 
-    public static List<Move> solve (Cube cube) {
-        Solver solver = new Solver();
-        return solver.doSolve (cube, null);
+
+    public List<Move> solve (Cube cube) {
+        TreeSolver treeSolver = new TreeSolver();
+        return treeSolver.doSolve (cube, null);
     }
 
     private List<Move> doSolve(Cube rootCube, Move priorMove) {
@@ -27,7 +28,7 @@ public class Solver {
             Move cancelingMove = priorMove == null ? null : new Move(priorMove.type, !priorMove.clockwise, cube, null);
             //List<Cube> cubesToTry = new ArrayList<>();
             boolean addAll = true;
-            for (Face.FaceType type : Face.FaceType.values()) {
+            for (FaceType type : FaceType.values()) {
                 for (int i =0;i < 2;i++) {
                     boolean clockWise = i == 0;
                     Move newMove = new Move(type, clockWise, cube, null);
@@ -99,45 +100,6 @@ public class Solver {
     }
 
 
-    public static class Move {
-        final Face.FaceType type;
-        final boolean clockwise;
-        final Cube cube;
-        final List<Move> priorMoves;
-
-        public Move(Face.FaceType type, boolean clockwise, Cube cube, List<Move> priorMoves) {
-            this.type = type;
-            this.clockwise = clockwise;
-            this.cube = cube;
-            this.priorMoves = priorMoves;
-        }
-
-
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            Move move = (Move) o;
-
-            if (clockwise != move.clockwise) return false;
-            if (type != move.type) return false;
-
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = type.hashCode();
-            result = 31 * result + (clockwise ? 1 : 0);
-            return result;
-        }
-
-        public void print() {
-            System.out.println("Face :"+type+" Rotate :"+(clockwise ? "Clockwise" : "Counter"));
-        }
-    }
 
     public static class CubeWithTransforms {
         Cube cube;

@@ -1,7 +1,9 @@
 package com.spinningnoodle.rubikssolver;
 
 import com.spinningnoodle.rubikssolver.library.Cube;
-import com.spinningnoodle.rubikssolver.library.Face;
+import com.spinningnoodle.rubikssolver.library.FaceType;
+import com.spinningnoodle.rubikssolver.library.solver.Move;
+import com.spinningnoodle.rubikssolver.library.solver.SolverFactory;
 
 import java.util.List;
 import java.util.Scanner;
@@ -28,39 +30,40 @@ public class CommandLine {
                     running = false;
                     break;
                 case "R":
-                    cube.rotate(Face.FaceType.Near, true);
-                    cube.print(Face.FaceType.Near);
+                    cube.rotate(FaceType.Near, true);
+                    cube.print(FaceType.Near);
                     break;
                 case "E":
-                    cube.rotate(Face.FaceType.Near, false);
-                    cube.print(Face.FaceType.Near);
+                    cube.rotate(FaceType.Near, false);
+                    cube.print(FaceType.Near);
                     break;
                 case "8":
-                    cube.print(Face.FaceType.North);
+                    cube.print(FaceType.North);
                     break;
                 case "2":
-                    cube.print(Face.FaceType.South);
+                    cube.print(FaceType.South);
                     break;
                 case "6":
-                    cube.print(Face.FaceType.East);
+                    cube.print(FaceType.East);
                     break;
                 case "4":
-                    cube.print(Face.FaceType.West);
+                    cube.print(FaceType.West);
                     break;
                 case "7":
-                    cube.print(Face.FaceType.Near);
+                    cube.print(FaceType.Near);
                     break;
                 case "9":
-                    cube.print(Face.FaceType.Far);
+                    cube.print(FaceType.Far);
                     break;
                 case "S":
                     cube.scramble();
                     cube.printAll();
-                    List<Solver.Move> moves = Solver.solve(cube);
+                    List<Move> moves = SolverFactory.getSolver(SolverFactory.Type.TREE).solve(cube);
                     // do them
-                    for (Solver.Move move : moves ) {
-                        cube.rotate(move.type,move.clockwise);
+                    for (Move move : moves ) {
+                        cube.rotate(move.getType(), move.isClockwise());
                     }
+
                     cube.printAll();
                     break;
 
